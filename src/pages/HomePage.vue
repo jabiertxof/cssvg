@@ -56,7 +56,14 @@ const loadProject = async (path: string) => {
 }
 
 #qList {
+  margin-top:36px;
   display: grid;
   grid-template-columns: 50% 50%;
+}
+</style>
+<style>
+#qHeader {
+  top:auto !important;
+  bottom:0;
 }
 </style>

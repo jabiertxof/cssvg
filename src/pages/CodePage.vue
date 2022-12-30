@@ -24,3 +24,9 @@ import AnimViewer from "../components/AnimViewer.vue";
   gap: 1%;
 }
 </style>
+<style>
+#qHeader {
+  top:auto !important;
+  bottom:0;
+}
+</style>

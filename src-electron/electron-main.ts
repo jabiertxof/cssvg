@@ -1,6 +1,8 @@
 import { app, BrowserWindow, ipcMain, nativeTheme, } from 'electron';
 import path from 'path';
 import os from 'os';
+import { timer } from 'rxjs';
+import { take } from 'rxjs/operators';
 import { screen } from 'electron';
 
 // needed in case process is undefined under Linux
@@ -22,7 +24,7 @@ function createWindow() {
   mainWindow = new BrowserWindow({
     icon: path.resolve(__dirname, 'icons/icon.png'), // tray icon
     width: screen.getPrimaryDisplay().bounds.width,
-    height: screen.getPrimaryDisplay().bounds.height / 4,
+    height: screen.getPrimaryDisplay().bounds.height,
     autoHideMenuBar: true,
     frame: false,
     x: 0,
@@ -47,8 +49,9 @@ function createWindow() {
     //   mainWindow?.webContents.closeDevTools();
     // });
   }
-
+  
   mainWindow.on('closed', () => {
+    exec(`killall broadwayd`)
     mainWindow = undefined;
   });
 
@@ -59,6 +62,8 @@ function createWindow() {
 // export const tempFilePath = () => `${projectsFolderPath}/temp.svg`
 
 app.whenReady().then(async () => {
+  await exec(`killall broadwayd`)
+  await exec(`broadwayd :5`)
   createWindow()
   ipcMain.handle('createProject', ({ }, p) => projectH.createProject(p))
   ipcMain.handle('loadProject', ({ }, p) => projectH.loadProject(p))
@@ -72,6 +77,8 @@ app.whenReady().then(async () => {
   ipcMain.handle('openSvgWithDefaultProgram', () => projectH.openSvgWithDefaultProgram())
   ipcMain.handle('closeApp', () => closeApp())
   mainWindow?.webContents.send('updatedSvg')
+  await timer(300).pipe(take(1)).toPromise();
+  projectH.openSvgWithInkscape()
 });
 
 

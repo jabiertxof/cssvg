@@ -1,5 +1,6 @@
 <template>
-  <q-page style="height: 100%;" v-if="mount">
+  <iframe id="broadway" style="width:100%;border:none;height:75vh" src="http://127.0.0.1:8085" />
+  <q-page style="height: 25vh;" v-if="mount">
     <div id="page">
       <anim-editor />
       <anim-viewer />
@@ -27,7 +28,8 @@ onBeforeMount(() => {
 #page {
   display: grid;
   grid-template-columns: 70% auto;
-  gap: 1%;
+  gap: 3px;
+  margin-top:20px;
   /* overflow: visible; */
   height: inherit;
 }
